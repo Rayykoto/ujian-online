@@ -25,5 +25,8 @@ Route::prefix('admin')->group(function () {
 
         //route dashboard
         Route::get('/dashboard', \App\Http\Controllers\Admin\DashboardController::class)->name('admin.dashboard');
+
+        //route resource lessons
+        Route::resource('/lessons', \App\Http\Controllers\Admin\LessonController::class, ['as' => 'admin']);
     });
 });
