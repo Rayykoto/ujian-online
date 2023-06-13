@@ -22,7 +22,7 @@
                                     type="text"
                                     class="form-control border-0 shadow"
                                     v-model="search"
-                                    placeholder="masukkan kata kunci dan enter..."
+                                    placeholder="Searcy title lesson and enter.."
                                 />
                                 <span class="input-group-text border-0 shadow">
                                     <i class="fa fa-search"></i>
