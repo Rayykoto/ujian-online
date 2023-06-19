@@ -4,7 +4,7 @@
         type="button"
         class="btn btn-primary"
         data-bs-toggle="modal"
-        data-bs-target="#lessonModal"
+        data-bs-target="#classroomModal"
     >
         Create
     </button>
@@ -12,7 +12,7 @@
     <!-- Modal -->
     <div
         class="modal fade"
-        id="lessonModal"
+        id="classroomModal"
         tabindex="-1"
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
@@ -21,7 +21,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">
-                        Lesson title
+                        {{ title }}
                     </h5>
                     <button
                         type="button"
@@ -32,22 +32,20 @@
                 </div>
                 <div class="modal-body">
                     <form @submit.prevent="submit">
-                        <div class="form-group">
-                            <label for="lessonTitle">Name Lesson</label>
-                            <input
-                                id="lessonTitle"
-                                type="text"
-                                class="form-control"
-                                placeholder="Insert your lesson"
-                                v-model="form.title"
-                            />
-                            <!-- Show validation error -->
-                            <!-- <div
-                                v-if="errors && errors.title"
-                                class="alert alert-danger mt-2"
-                            >
-                                {{ errors.title }}
-                            </div> -->
+                        <label for="classroomTitle">Name Classroom</label>
+                        <input
+                            id="classroomTitle"
+                            type="text"
+                            class="form-control"
+                            placeholder="Insert your classroom"
+                            v-model="form.title"
+                        />
+                        <!-- Show validation error -->
+                        <div
+                            v-if="errors && errors.title"
+                            class="alert alert-danger mt-2"
+                        >
+                            {{ errors.title }}
                         </div>
                         <div class="modal-footer">
                             <button
@@ -76,6 +74,7 @@ import Swal from "sweetalert2";
 export default {
     props: {
         errors: Object,
+        title: String,
     },
 
     setup() {
@@ -85,7 +84,7 @@ export default {
 
         const submit = () => {
             Inertia.post(
-                "/admin/lessons",
+                "/admin/classrooms",
                 {
                     title: form.title,
                 },
@@ -93,7 +92,7 @@ export default {
                     onSuccess: () => {
                         Swal.fire({
                             title: "Success!",
-                            text: "Lesson Saved!",
+                            text: "Classroom Saved!",
                             icon: "success",
                             showConfirmButton: false,
                             timer: 2000,
@@ -101,7 +100,7 @@ export default {
 
                         resetForm();
                     },
-                    onError: (error) => {
+                    onError: () => {
                         Swal.fire({
                             title: "Error!",
                             text: "Data Not Uniqe & Check Data Correctly!",

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\LessonController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,5 +29,8 @@ Route::prefix('admin')->group(function () {
 
         //route resource lessons
         Route::resource('/lessons', \App\Http\Controllers\Admin\LessonController::class, ['as' => 'admin']);
+
+        //route classrooms
+        Route::resource('/classrooms', \App\Http\Controllers\Admin\ClassroomController::class, ['as' => 'admin']);
     });
 });

@@ -1,13 +1,13 @@
 <template>
     <Head>
-        <title>Lessons - Aplication</title>
+        <title>Classrooms - Aplication</title>
     </Head>
     <div class="container-fluid mb-5 mt-5">
         <div class="row">
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-md-3 col-12 mb-2">
-                        <DynamicModal title="Title Lesson" />
+                        <ClassroomModal />
                     </div>
                     <div class="col-md-9 col-12 mb-2">
                         <form @submit.prevent="handleSearch">
@@ -57,27 +57,29 @@
                                 <div class="mt-2"></div>
                                 <tbody>
                                     <tr
-                                        v-for="(data, index) in lessons.data"
+                                        v-for="(
+                                            classroom, index
+                                        ) in classrooms.data"
                                         :key="index"
                                     >
                                         <td class="fw-bold text-center">
                                             {{
                                                 ++index +
-                                                (lessons.current_page - 1) *
-                                                    lessons.per_page
+                                                (classrooms.current_page - 1) *
+                                                    classrooms.per_page
                                             }}
                                         </td>
-                                        <td>{{ data.title }}</td>
+                                        <td>{{ classroom.title }}</td>
                                         <td class="text-center">
                                             <Link
-                                                :href="`/admin/lessons/${data.id}/edit`"
+                                                :href="`/admin/lessons/${classroom.id}/edit`"
                                                 class="btn btn-sm btn-info border-0 shadow me-2"
                                                 type="button"
                                                 ><i class="fa fa-pencil-alt"></i
                                             ></Link>
                                             <button
                                                 @click.prevent="
-                                                    destroy(data.id)
+                                                    destroy(classroom.id)
                                                 "
                                                 class="btn btn-sm btn-danger border-0"
                                             >
@@ -86,16 +88,9 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                                <!-- Show validation error -->
-                                <!-- <div
-                                    v-if="errors.title"
-                                    class="alert alert-danger mt-2"
-                                >
-                                    {{ errors.title }}
-                                </div> -->
                             </table>
                         </div>
-                        <Pagination :links="lessons.links" align="end" />
+                        <Pagination :links="classrooms.links" align="end" />
                     </div>
                 </div>
             </div>
@@ -119,12 +114,11 @@ import { ref } from "vue";
 //import inertia adapter
 import { Inertia } from "@inertiajs/inertia";
 
-// import CreateModal from "./CreateModal.vue";
-
-import DynamicModal from "../../../Components/LessonModal.vue";
-
 //import sweet alert2
 import Swal from "sweetalert2";
+
+//import classrooms
+import ClassroomModal from "../../../Components/ClassroomModal.vue";
 
 export default {
     //layout
@@ -135,13 +129,13 @@ export default {
         Head,
         Link,
         Pagination,
-        DynamicModal,
+        ClassroomModal,
     },
 
     //props
     props: {
         errors: Object,
-        lessons: Object,
+        classrooms: Object,
     },
 
     //inisialisasi composition API
@@ -152,7 +146,7 @@ export default {
 
         //define method search
         const handleSearch = () => {
-            Inertia.get("/admin/lessons", {
+            Inertia.get("/admin/classrooms", {
                 //send params "q" with value from state "search"
                 q: search.value,
             });
@@ -170,7 +164,7 @@ export default {
                 confirmButtonText: "Yes delete it!",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Inertia.delete(`/admin/lessons/${id}`);
+                    Inertia.delete(`/admin/classrooms/${id}`);
 
                     Swal.fire({
                         title: "Deleted!",

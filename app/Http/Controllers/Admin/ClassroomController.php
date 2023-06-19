@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Lesson;
+use App\Models\Classroom;
 use Illuminate\Http\Request;
 
-class LessonController extends Controller
+class ClassroomController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,16 +15,15 @@ class LessonController extends Controller
      */
     public function index()
     {
-        //get lessons
-        $lessons = Lesson::when(request()->q, function($lessons) {
-            $lessons = $lessons->where('title', 'like', '%' . request()->q . '%');
+        //get classrooms
+        $classrooms = Classroom::when(request()->q, function($classrooms) {
+            $classrooms = $classrooms->where('title', 'like', '%' . request()->q . '%');
         })->latest()->paginate(8);
 
-        //append query string to paginate links
-        $lessons->appends(['q' => request()->q]);
+        $classrooms->appends(['q' => request()->q]);
 
-        return inertia('Admin/Lessons/Index', [
-            'lessons' => $lessons,
+        return inertia('Admin/Classrooms/Index', [
+            'classrooms' => $classrooms,
         ]);
     }
 
@@ -35,6 +34,7 @@ class LessonController extends Controller
      */
     public function create()
     {
+        //
     }
 
     /**
@@ -45,18 +45,17 @@ class LessonController extends Controller
      */
     public function store(Request $request)
     {
-        //validate
         $request->validate([
-            'title' => 'required|string|unique:lessons',
+            'title' => 'required|string|unique:classrooms'
         ]);
 
-        //create lesson
-        Lesson::create([
+        //create classroom
+        Classroom::create([
             'title' => $request->title,
         ]);
 
-        //redirect
-        return redirect()->route('admin.lessons.index');
+        //return redirect 
+        return redirect()->route('admin.classrooms.index');
     }
 
     /**
@@ -78,12 +77,7 @@ class LessonController extends Controller
      */
     public function edit($id)
     {
-        $lesson = Lesson::where('id', $id)->first();
-        
-        //render
-        return inertia('Admin/Lessons/Edit', [
-            'lesson' => $lesson,
-        ]);
+        //
     }
 
     /**
@@ -95,21 +89,7 @@ class LessonController extends Controller
      */
     public function update(Request $request, $id)
     {
-
-        $lesson = Lesson::where('id', $id)->first();
-
-        //validate request
-        $request->validate([
-            'title' => 'required|string|unique:lessons,title,'.$lesson->id,
-        ]);
-
-        //update lesson
-        $lesson->update([
-            'title' => $request->title,
-        ]);
-
-        //redirect
-        return redirect()->route('admin.lessons.index');
+        //
     }
 
     /**
@@ -120,13 +100,6 @@ class LessonController extends Controller
      */
     public function destroy($id)
     {
-        //get lesson
-        $lesson = Lesson::findOrFail($id);
-
-        //action delete
-        $lesson->delete();
-
-        //message & redirect
-        return redirect()->route('admin.lessons.index');
+        //
     }
 }

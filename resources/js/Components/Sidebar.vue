@@ -166,7 +166,7 @@
                                     />
                                 </svg>
                             </span>
-                            <span class="sidebar-text">Ada Ide?</span>
+                            <span class="sidebar-text">Classrooms</span>
                         </span>
                     </Link>
                 </li>
