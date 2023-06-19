@@ -72,7 +72,7 @@
                                         <td>{{ classroom.title }}</td>
                                         <td class="text-center">
                                             <Link
-                                                :href="`/admin/lessons/${classroom.id}/edit`"
+                                                :href="`/admin/classrooms/${classroom.id}/edit`"
                                                 class="btn btn-sm btn-info border-0 shadow me-2"
                                                 type="button"
                                                 ><i class="fa fa-pencil-alt"></i

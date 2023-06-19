@@ -32,5 +32,8 @@ Route::prefix('admin')->group(function () {
 
         //route classrooms
         Route::resource('/classrooms', \App\Http\Controllers\Admin\ClassroomController::class, ['as' => 'admin']);
+
+        //route students
+        Route::resource('/students', \App\Http\Controllers\Admin\StudentController::class, ['as' => 'admin']);
     });
 });

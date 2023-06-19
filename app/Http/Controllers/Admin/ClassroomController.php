@@ -77,7 +77,11 @@ class ClassroomController extends Controller
      */
     public function edit($id)
     {
-        //
+        $classroom = Classroom::findOrFail($id);
+
+        return inertia('Admin/Classrooms/Edit',[
+            'classroom' => $classroom,
+        ]);
     }
 
     /**
@@ -87,9 +91,19 @@ class ClassroomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Classroom $classroom)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|unique:classrooms,title,'.$classroom->id,
+        ]);
+
+        //create classroom
+        $classroom->update([
+            'title' => $request->title,
+        ]);
+
+        //return redirect 
+        return redirect()->route('admin.classrooms.index');
     }
 
     /**
@@ -100,6 +114,10 @@ class ClassroomController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $classroom = Classroom::FindOrFail($id);
+
+        $classroom->delete();
+        
+        return redirect()->route('admin.classrooms.index');
     }
 }

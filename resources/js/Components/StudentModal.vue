@@ -2,17 +2,17 @@
     <!-- Button trigger modal -->
     <button
         type="button"
-        class="btn btn-primary"
+        class="btn btn-md btn-primary border-0 shadow w-100"
         data-bs-toggle="modal"
-        data-bs-target="#classroomModal"
+        data-bs-target="#studentModal"
     >
-        Create
+        {{ namebutton }}
     </button>
 
     <!-- Modal -->
     <div
         class="modal fade"
-        id="classroomModal"
+        id="studentModal"
         tabindex="-1"
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
@@ -32,21 +32,59 @@
                 </div>
                 <div class="modal-body">
                     <form @submit.prevent="submit">
-                        <label for="classroomTitle">Name Classroom</label>
+                        <label for="clasroomTitle">Classroom</label>
+                        <select class="form-select" v-model="form.classroom_id">
+                            <option
+                                v-for="(classroom, index) in classrooms"
+                                :key="index"
+                                :value="classroom.id"
+                            >
+                                {{ classroom.title }}
+                            </option>
+                        </select>
+                        <label for="studentNisn">NISN</label>
                         <input
-                            id="classroomTitle"
+                            id="studentNisn"
                             type="text"
-                            class="form-control"
-                            placeholder="Insert your classroom"
-                            v-model="form.title"
+                            class="form-control mb-2"
+                            placeholder="Insert your NISN"
+                            v-model="form.nisn"
                         />
-                        <!-- Show validation error -->
-                        <div
-                            v-if="errors && errors.title"
-                            class="alert alert-danger mt-2"
-                        >
-                            {{ errors.title }}
+                        <label for="studentName">Name</label>
+                        <input
+                            id="studentName"
+                            type="text"
+                            class="form-control mb-2"
+                            placeholder="Insert your name"
+                            v-model="form.name"
+                        />
+                        <div class="form-check form-check-inline">
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                v-model="form.gender"
+                                value="L"
+                                id="maleStudent"
+                            />
+                            <label class="form-check-label" for="maleStudent">
+                                Male
+                            </label>
                         </div>
+
+                        <div class="form-check form-check-inline">
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                v-model="form.gender"
+                                value="P"
+                                id="femaleStudent"
+                                checked
+                            />
+                            <label class="form-check-label" for="femaleStudent">
+                                Female
+                            </label>
+                        </div>
+
                         <div class="modal-footer">
                             <button
                                 type="button"
@@ -74,25 +112,33 @@ import Swal from "sweetalert2";
 export default {
     props: {
         errors: Object,
+        classrooms: Object,
         title: String,
+        namebutton: String,
     },
 
     setup() {
         const form = reactive({
-            title: "",
+            classroom_id: "",
+            nisn: "",
+            name: "",
+            gender: "",
         });
 
         const submit = () => {
             Inertia.post(
-                "/admin/classrooms",
+                "/admin/students",
                 {
-                    title: form.title,
+                    classroom_id: form.classroom_id,
+                    nisn: form.nisn,
+                    name: form.name,
+                    gender: form.gender,
                 },
                 {
                     onSuccess: () => {
                         Swal.fire({
                             title: "Success!",
-                            text: "Classroom Saved!",
+                            text: "Student Saved!",
                             icon: "success",
                             showConfirmButton: false,
                             timer: 2000,
@@ -107,8 +153,6 @@ export default {
                             icon: "error",
                             showConfirmButton: true,
                         });
-
-                        resetForm();
                     },
                 }
             );

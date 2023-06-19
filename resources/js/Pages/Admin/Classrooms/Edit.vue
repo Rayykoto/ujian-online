@@ -1,23 +1,23 @@
 <template>
     <Head>
-        <title>Modify Lesson - Application</title>
+        <title>Modify Classroom - Application</title>
     </Head>
     <div class="container-fluid mb-5 mt-5">
         <div class="row">
             <div class="col-md-12">
                 <Link
-                    href="/admin/lessons"
+                    href="/admin/classrooms"
                     class="btn btn-md btn-primary border-0 shadow mb-3"
                     type="button"
                     ><i class="fa fa-long-arrow-alt-left me-2"></i> Back</Link
                 >
                 <div class="card border-0 shadow">
                     <div class="card-body">
-                        <h5><i class="fa fa-bookmark"></i> Modify Lesson</h5>
+                        <h5><i class="fa fa-bookmark"></i> Modify Classroom</h5>
                         <hr />
                         <form @submit.prevent="submit">
                             <div class="mb-4">
-                                <label>Name Lesson</label>
+                                <label>Name Classroom</label>
                                 <input
                                     type="text"
                                     class="form-control"
@@ -82,21 +82,21 @@ export default {
     //props
     props: {
         errors: Object,
-        lesson: Object,
+        classroom: Object,
     },
 
     //inisialisasi composition API
     setup(props) {
         //define form with reactive
         const form = reactive({
-            title: props.lesson.title,
+            title: props.classroom.title,
         });
 
         //method "submit"
         const submit = () => {
             //send data to server
             Inertia.put(
-                `/admin/lessons/${props.lesson.id}`,
+                `/admin/classrooms/${props.classroom.id}`,
                 {
                     //data
                     title: form.title,
@@ -106,7 +106,7 @@ export default {
                         //show success alert
                         Swal.fire({
                             title: "Success!",
-                            text: "Pelajaran Berhasil Diupdate!.",
+                            text: "Classroom Succed Saved!.",
                             icon: "success",
                             showConfirmButton: false,
                             timer: 2000,
