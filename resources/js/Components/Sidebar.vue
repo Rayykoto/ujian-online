@@ -201,7 +201,7 @@
                                     />
                                 </svg>
                             </span>
-                            <span class="sidebar-text">Ada Ide?</span>
+                            <span class="sidebar-text">Students</span>
                         </span>
                     </Link>
                 </li>
@@ -238,7 +238,7 @@
                                     />
                                 </svg>
                             </span>
-                            <span class="sidebar-text">Ada Ide?</span>
+                            <span class="sidebar-text">Exams</span>
                         </span>
                     </Link>
                 </li>

@@ -1,28 +1,30 @@
 <template>
     <Head>
-        <title>Lessons - Aplication</title>
+        <title>Exams - Application Exams Online</title>
     </Head>
     <div class="container-fluid mb-5 mt-5">
         <div class="row">
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-md-3 col-12 mb-2">
-                        <DynamicModal title="Title Lesson" />
+                        <Link
+                            href="/admin/exams/create"
+                            class="btn btn-md btn-primary border-0 shadow w-100"
+                            type="button"
+                            ><i class="fa fa-plus-circle"></i> Add New</Link
+                        >
                     </div>
                     <div class="col-md-9 col-12 mb-2">
-                        <form @submit.prevent="handleSearch">
+                        <form>
                             <div class="input-group">
                                 <input
                                     type="text"
                                     class="form-control border-0 shadow"
-                                    v-model="search"
-                                    placeholder="Search title lesson and enter.."
+                                    placeholder="Input keywords and enter..."
                                 />
-                                <button
-                                    class="input-group-text border-0 shadow"
-                                >
+                                <span class="input-group-text border-0 shadow">
                                     <i class="fa fa-search"></i>
-                                </button>
+                                </span>
                             </div>
                         </form>
                     </div>
@@ -45,7 +47,10 @@
                                         >
                                             No.
                                         </th>
-                                        <th class="border-0">Name Lessons</th>
+                                        <th class="border-0">Exams</th>
+                                        <th class="border-0">Lesson</th>
+                                        <th class="border-0">Class</th>
+                                        <th class="border-0">Many Questions</th>
                                         <th
                                             class="border-0 rounded-end"
                                             style="width: 15%"
@@ -57,27 +62,42 @@
                                 <div class="mt-2"></div>
                                 <tbody>
                                     <tr
-                                        v-for="(data, index) in lessons.data"
+                                        v-for="(exam, index) in exams.data"
                                         :key="index"
                                     >
                                         <td class="fw-bold text-center">
                                             {{
                                                 ++index +
-                                                (lessons.current_page - 1) *
-                                                    lessons.per_page
+                                                (exams.current_page - 1) *
+                                                    exams.per_page
                                             }}
                                         </td>
-                                        <td>{{ data.title }}</td>
+                                        <td>{{ exam.title }}</td>
+                                        <td>{{ exam.lesson.title }}</td>
+                                        <td class="text-center">
+                                            {{ exam.classroom.title }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ exam.questions.length }}
+                                        </td>
                                         <td class="text-center">
                                             <Link
-                                                :href="`/admin/lessons/${data.id}/edit`"
+                                                :href="`/admin/exams/${exam.id}`"
+                                                class="btn btn-sm btn-primary border-0 shadow me-2"
+                                                type="button"
+                                                ><i
+                                                    class="fa fa-plus-circle"
+                                                ></i
+                                            ></Link>
+                                            <Link
+                                                :href="`/admin/exams/${exam.id}/edit`"
                                                 class="btn btn-sm btn-info border-0 shadow me-2"
                                                 type="button"
                                                 ><i class="fa fa-pencil-alt"></i
                                             ></Link>
                                             <button
                                                 @click.prevent="
-                                                    destroy(data.id)
+                                                    destroy(exam.id)
                                                 "
                                                 class="btn btn-sm btn-danger border-0"
                                             >
@@ -86,16 +106,9 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                                <!-- Show validation error -->
-                                <!-- <div
-                                    v-if="errors.title"
-                                    class="alert alert-danger mt-2"
-                                >
-                                    {{ errors.title }}
-                                </div> -->
                             </table>
                         </div>
-                        <Pagination :links="lessons.links" align="end" />
+                        <Pagination :links="exams.links" align="end" />
                     </div>
                 </div>
             </div>
@@ -119,10 +132,6 @@ import { ref } from "vue";
 //import inertia adapter
 import { Inertia } from "@inertiajs/inertia";
 
-// import CreateModal from "./CreateModal.vue";
-
-import DynamicModal from "../../../Components/LessonModal.vue";
-
 //import sweet alert2
 import Swal from "sweetalert2";
 
@@ -135,30 +144,29 @@ export default {
         Head,
         Link,
         Pagination,
-        DynamicModal,
     },
 
     //props
     props: {
-        errors: Object,
-        lessons: Object,
+        exams: Object,
     },
 
     //inisialisasi composition API
     setup() {
+        //define state search
         const search = ref(
             "" || new URL(document.location).searchParams.get("q")
         );
 
         //define method search
         const handleSearch = () => {
-            Inertia.get("/admin/lessons", {
+            Inertia.get("/admin/exams", {
                 //send params "q" with value from state "search"
                 q: search.value,
             });
         };
 
-        //destroy
+        //define method destroy
         const destroy = (id) => {
             Swal.fire({
                 title: "Are you sure?",
@@ -170,11 +178,11 @@ export default {
                 confirmButtonText: "Yes delete it!",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Inertia.delete(`/admin/lessons/${id}`);
+                    Inertia.delete(`/admin/exams/${id}`);
 
                     Swal.fire({
                         title: "Deleted!",
-                        text: "Lesson Succed Deleted!.",
+                        text: "Exam Succed Deleted!.",
                         icon: "success",
                         timer: 2000,
                         showConfirmButton: false,

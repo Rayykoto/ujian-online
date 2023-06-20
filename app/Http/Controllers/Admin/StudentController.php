@@ -24,12 +24,9 @@ class StudentController extends Controller
         //append query string to pagination links
         $students->appends(['q' => request()->q]);
 
-        $classrooms = Classroom::all();
-
         //render with inertia
         return inertia('Admin/Students/Index', [
             'students' => $students,
-            'classrooms' => $classrooms
         ]);
     }
 

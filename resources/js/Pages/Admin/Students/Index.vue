@@ -28,16 +28,19 @@
                         </div>
                     </div>
                     <div class="col-md-7 col-12 mb-2">
-                        <form>
+                        <form @submit.prevent="handleSearch">
                             <div class="input-group">
                                 <input
                                     type="text"
                                     class="form-control border-0 shadow"
+                                    v-model="search"
                                     placeholder="Input keywords and enter..."
                                 />
-                                <span class="input-group-text border-0 shadow">
+                                <button
+                                    class="input-group-text border-0 shadow"
+                                >
                                     <i class="fa fa-search"></i>
-                                </span>
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -95,7 +98,24 @@
                                         <td class="text-center">
                                             {{ student.gender }}
                                         </td>
-                                        <td class="text-center"></td>
+                                        <td class="text-center">
+                                            <Link
+                                                :href="`/admin/students/${student.id}/edit`"
+                                                class="btn btn-sm btn-info border-0 shadow me-2"
+                                                type="button"
+                                                ><i
+                                                    class="fa fa-pencil-alt"
+                                                ></i>
+                                            </Link>
+                                            <button
+                                                @click.prevent="
+                                                    destroy(student.id)
+                                                "
+                                                class="btn btn-sm btn-danger border-0"
+                                            >
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -117,6 +137,10 @@ import Pagination from "../../../Components/Pagination.vue";
 
 //import Heade and Link from Inertia
 import { Head, Link } from "@inertiajs/inertia-vue3";
+import { ref } from "vue";
+import { Inertia } from "@inertiajs/inertia";
+//import sweet alert2
+import Swal from "sweetalert2";
 
 export default {
     //layout
@@ -133,6 +157,52 @@ export default {
     props: {
         students: Object,
         errors: Object,
+    },
+
+    //inialisasi composition API
+    setup() {
+        const search = ref(
+            "" || new URL(document.location).searchParams.get("q")
+        );
+
+        //define method search
+        const handleSearch = () => {
+            Inertia.get("/admin/students", {
+                //send params q with value from state search
+                q: search.value,
+            });
+        };
+
+        //destroy
+        const destroy = (id) => {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You can't restore this data!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes delete it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Inertia.delete(`/admin/students/${id}`);
+
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Student Succed Deleted!.",
+                        icon: "success",
+                        timer: 2000,
+                        showConfirmButton: false,
+                    });
+                }
+            });
+        };
+
+        return {
+            search,
+            handleSearch,
+            destroy,
+        };
     },
 };
 </script>
