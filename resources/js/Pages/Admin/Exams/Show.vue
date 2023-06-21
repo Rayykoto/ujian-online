@@ -199,6 +199,10 @@ import Pagination from "../../../Components/Pagination.vue";
 //import Heade and Link from Inertia
 import { Head, Link } from "@inertiajs/inertia-vue3";
 
+import Swal from "sweetalert2";
+
+import { Inertia } from "@inertiajs/inertia";
+
 export default {
     //layout
     layout: LayoutAdmin,
@@ -214,6 +218,37 @@ export default {
     props: {
         errors: Object,
         exam: Object,
+    },
+    //inisialisasi composition API
+    setup() {
+        const destroy = (exam_id, question_id) => {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You can't restore this data!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes delete it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Inertia.delete(
+                        `/admin/exams/${exam_id}/questions/${question_id}/destroy`
+                    );
+
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Exam Succed Deleted!.",
+                        icon: "success",
+                        timer: 2000,
+                        showConfirmButton: false,
+                    });
+                }
+            });
+        };
+        return {
+            destroy,
+        };
     },
 };
 </script>

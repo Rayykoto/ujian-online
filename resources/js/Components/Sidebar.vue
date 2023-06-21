@@ -271,7 +271,7 @@
                                     />
                                 </svg>
                             </span>
-                            <span class="sidebar-text">Ada Ide?</span>
+                            <span class="sidebar-text">Exam Session</span>
                         </span>
                     </Link>
                 </li>

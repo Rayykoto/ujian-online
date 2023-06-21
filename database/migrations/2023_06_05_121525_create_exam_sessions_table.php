@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('exam_id')->references('id')->on('exams')->cascadeOnDelete();
             $table->string('title');
             $table->dateTime('start_time');
-            $table->date('end_time');
+            $table->dateTime('end_time');
             $table->timestamps();
         });
     }
